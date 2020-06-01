@@ -1,0 +1,81 @@
+﻿@model IEnumerable<BertoniSolutions.Miniproyecto.Application.Entities.Photo>
+
+@{
+    ViewData["Title"] = "List";
+}
+
+<h1>List</h1>
+<div class="container overflow-auto" style="height:500px;">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AlbumId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Url)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ThumbnailUrl)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AlbumId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Url)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ThumbnailUrl)
+                    </td>
+                    <td>
+                        <a asp-controller="Comments" asp-action="List" asp-route-photoId="@item.Id" onclick="return LoadComments(this, '@item.Id')">Ver Comentarios</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<h2>Comentarios</h2>
+<div class="container" id="comments">
+
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        function LoadComments(link, photoId) {
+            $.ajax({
+                url: link,
+                data: { photoId },
+                type: "GET"
+            })
+            .done(function (result) {
+                var commentsDiv = $("#comments");
+                commentsDiv.html(result);
+            })
+            .catch(function (e) {
+                var commentsDiv = $("#comments");
+                commentsDiv.html("<p>Sin comentarios</p>");
+            });
+            return false;
+        }
+    </script>
+}
